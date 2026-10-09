@@ -7,6 +7,8 @@
 ## Repository contents
 - `week1-eda.ipynb` - Week 1: exploratory data analysis
 - `week2-ml-models.ipynb` - Week 2: building, evaluating and interpreting ML models
+- `week3-optimization.ipynb` - Week 3: cross-validation, tuning, XGBoost, K-means segments, PCA
+- `churn_model.joblib` - Week 3: final saved pipeline (about 428 KB), to be deployed in Week 4
 - `README.md` - this file
 
 ## Week 1: Exploratory Data Analysis
@@ -34,6 +36,16 @@
 | LR balanced | 0.739 | 0.505 | 0.781 | 0.613 | 0.841 |
 | Decision Tree (d=5) | 0.796 | 0.632 | 0.551 | 0.589 | 0.829 |
 | Random Forest | 0.807 | 0.673 | 0.529 | 0.593 | 0.842 |
+
+## Week 3: Model Optimization and Unsupervised Learning
+- Notebook: `week3-optimization.ipynb`
+- Split-to-split accuracy range across 20 seeds: 0.780 to 0.828 (std 0.0104, theoretical standard error 0.0107)
+- 5-fold CV AUC: LR 0.846 +/- 0.013, RF 0.844 +/- 0.011, XGBoost (tuned) 0.850 +/- 0.012
+- Tuning: best RF params (random search) max_depth 15, min_samples_leaf 15, max_features 0.21; grid vs random search time 73 s vs 84 s (both 120 fits, CV AUC 0.8468 vs 0.8464)
+- Test AUC of final model (XGBoost, used once): 0.848 (recall 0.521, precision 0.659 at threshold 0.5), saved as `churn_model.joblib`
+- Customer segments (k = 4): Fiber month-to-month (43% churn), New low spend (32%), Loyal premium bundle (14%), Loyal basic (5%)
+- PCA: 15 of 30 components explain 90% of the variance; PC1 is mostly a "no internet service" axis (several one-hot columns are exact copies)
+- Biggest lesson: a single split can move accuracy by about 5 points, and after careful tuning the three model families are statistically tied (CV AUC about 0.85), so the choice of threshold and the use of segments matter more than the choice of model.
 
 ### Setup
 Open the Kaggle notebooks, or run locally:
