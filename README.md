@@ -8,7 +8,8 @@
 - `week1-eda.ipynb` - Week 1: exploratory data analysis
 - `week2-ml-models.ipynb` - Week 2: building, evaluating and interpreting ML models
 - `week3-optimization.ipynb` - Week 3: cross-validation, tuning, XGBoost, K-means segments, PCA
-- `churn_model.joblib` - Week 3: final saved pipeline (about 428 KB), to be deployed in Week 4
+- `churn_model.joblib` - Week 3: final saved model (about 428 KB)
+- Week 4: the deployed app lives in its own repo, `churn-risk-advisor` (see the Week 4 section below)
 - `README.md` - this file
 
 ## Week 1: Exploratory Data Analysis
@@ -46,6 +47,13 @@
 - Customer segments (k = 4): Fiber month-to-month (43% churn), New low spend (32%), Loyal premium bundle (14%), Loyal basic (5%)
 - PCA: 15 of 30 components explain 90% of the variance; PC1 is mostly a "no internet service" axis (several one-hot columns are exact copies)
 - Biggest lesson: a single split can move accuracy by about 5 points, and after careful tuning the three model families are statistically tied (CV AUC about 0.85), so the choice of threshold and the use of segments matter more than the choice of model.
+
+## Week 4: From Notebook to Product
+- Deployed on Streamlit Community Cloud with Python 3.12 (scikit-learn 1.6.1, xgboost 3.4.1)
+- Live app: https://churn-risk-advisor-mifk87bjaqxx5xfumfjtw3.streamlit.app/ (code and model card: https://github.com/Shoaibrhman/churn-risk-advisor)
+- Notebook cells (end of `week3-optimization.ipynb`): skew demo (P(churn) 0.136 with the Week 3 encoder vs 0.012 with the serving encoder), parity test passed on 7,043 customers (largest difference 0.0), what-if table, `model_meta.json`
+- Final model in the app: tuned XGBoost, CV AUC 0.850 +/- 0.012, test AUC 0.848, contact threshold 0.20 (cost analysis, FN = PKR 6,000, FP = PKR 1,000)
+- Biggest lesson: a silent encoding bug changed one customer's probability from 0.012 to 0.136 without any error, so a parity test on every row is what proves that a deployed model gives the notebook's answers.
 
 ### Setup
 Open the Kaggle notebooks, or run locally:
